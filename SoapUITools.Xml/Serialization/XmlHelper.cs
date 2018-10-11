@@ -20,13 +20,17 @@ namespace SoapUITools.Xml.Serialization
 
         #region Project
 
-        private static Project GetProject(XDocument xDocument)
+        public static XElement GetProjectXElement(XDocument xDocument)
         {
             XName xName = XName.Get("soapui-project", ConfigNamespace);
             XElement xElement = xDocument.Element(xName);
+            return xElement;
+        }
 
+        private static Project GetProject(XDocument xDocument)
+        {
+            XElement xElement = GetProjectXElement(xDocument);
             Project project = ToProject(xElement);
-
             return project;
         }
 
@@ -42,10 +46,16 @@ namespace SoapUITools.Xml.Serialization
 
         #region Interface
 
-        private static Interface[] GetInterfaces(XElement projectXElement)
+        public static IEnumerable<XElement> GetInterfaceXElements(XElement projectXElement)
         {
             XName xName = XName.Get("interface", ConfigNamespace);
             IEnumerable<XElement> xElements = projectXElement.Elements(xName).ToList();
+            return xElements;
+        }
+
+        private static Interface[] GetInterfaces(XElement projectXElement)
+        {
+            IEnumerable<XElement> xElements = GetInterfaceXElements(projectXElement);
             Interface[] interfaces = xElements.Select(e => ToInterface(e)).ToArray();
             return interfaces;
         }
@@ -61,12 +71,18 @@ namespace SoapUITools.Xml.Serialization
 
         #region Resource
 
-        private static Resource[] GetResources(XElement interfaceXElement)
+        public static IEnumerable<XElement> GetResourceXElements(XElement interfaceXElement)
         {
             XName xName = XName.Get("resource", ConfigNamespace);
             IEnumerable<XElement> xElements = interfaceXElement.Elements(xName).ToList();
-            Resource[] interfaces = xElements.Select(e => ToResource(e)).ToArray();
-            return interfaces;
+            return xElements;
+        }
+
+        private static Resource[] GetResources(XElement interfaceXElement)
+        {
+            IEnumerable<XElement> xElements = GetResourceXElements(interfaceXElement);
+            Resource[] resources = xElements.Select(e => ToResource(e)).ToArray();
+            return resources;
         }
 
         private static Resource ToResource(XElement xElement)
