@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SoapUITools.Xml;
+using SoapUITools.Xml.Definitions;
+using SoapUITools.Xml.Serialization;
 
 namespace SoapUITools.ConsoleApp
 {
@@ -12,7 +15,9 @@ namespace SoapUITools.ConsoleApp
 
         static void Main(string[] args)
         {
+            Project project = XmlSerializer.Deserialize(Path);
 
+            Console.ReadLine();
         }
     }
 }
