@@ -17,12 +17,13 @@
             be included in the assembly, and makes it available
             to the application as a resource.
         -->
-
-        <!--Source="C:\Users\amael.berteau\OneDrive\Projets\SoapUITools\Technique\Examples\EasyNanny-WebAPI-soapui-project.xml"-->
+        <XmlNamespaceMappingCollection x:Key="NamespaceMappingCollection">
+            <XmlNamespaceMapping Uri="http://eviware.com/soapui/config" Prefix="con" />
+        </XmlNamespaceMappingCollection>
 
         <XmlDataProvider x:Key="xmldata"
-                         Source="testdata.xml"
-                         XPath="/root" />
+                         Source="C:\Users\amael.berteau\OneDrive\Projets\SoapUITools\Technique\Examples\EasyNanny-WebAPI-soapui-project.xml"
+                         XmlNamespaceManager="{StaticResource NamespaceMappingCollection}" />
 
         <!--
             Data Templates for each XML tag type expected in file.
@@ -36,8 +37,8 @@
             specified in DataType, it will use the associated
             template to display data about that node.
         -->
-        <HierarchicalDataTemplate DataType="Node"
-                                  ItemsSource="{Binding XPath=./*}">
+        <HierarchicalDataTemplate DataType="interface"
+                                  ItemsSource="{Binding XPath=/con:soapui-project/con:interface}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="0"
                            Text="Node:" />
@@ -45,16 +46,16 @@
                            Text="{Binding XPath=@name}" />
             </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="leaf">
+        <!--<HierarchicalDataTemplate DataType="resource">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="0"
                            Text="Leaf:" />
                 <TextBlock Margin="5,0,0,0"
                            Text="{Binding XPath=@name}" />
             </StackPanel>
-        </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="root"
-                                  ItemsSource="{Binding XPath=./*}">
+        </HierarchicalDataTemplate>-->
+        <HierarchicalDataTemplate DataType="soapui-project"
+                                  ItemsSource="{Binding XPath=/con:soapui-project}">
             <TextBlock Margin="0"
                        Text="ROOT" />
         </HierarchicalDataTemplate>
@@ -65,7 +66,7 @@
         with a key of xmldata (set above in the Window.Resources
         section).
     -->
-    <Grid DataContext="{StaticResource xmldata}">
+    <Grid>
 
         <!--
             Setting the ItemsSource to "{Binding}" causes the TreeView
@@ -76,7 +77,7 @@
         <TreeView Name="dirTree"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
-                  ItemsSource="{Binding}"
+                  ItemsSource="{Binding Source={StaticResource xmldata}}"
                   VirtualizingStackPanel.IsVirtualizing="False"
                   VirtualizingStackPanel.VirtualizationMode="Standard" />
     </Grid>
