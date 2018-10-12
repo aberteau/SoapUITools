@@ -32,7 +32,7 @@ namespace SoapUITools.Xml
                 interfaceXElement.ReplaceNodes(orderedNodes);
             }
 
-            xDocument.Save(outputPath);
+            xDocument.Save(outputPath, SaveOptions.DisableFormatting);
         }
 
         private static void UpdateName(XElement projectXElement)
