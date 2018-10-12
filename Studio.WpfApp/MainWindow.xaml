@@ -6,7 +6,78 @@
         xmlns:local="clr-namespace:SoapUITools.Studio.WpfApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Window.Resources>
+
+        <!--
+            XML Source
+            
+            The actual file is saved in the root directory of the
+            project and its Build Action is set to "Resource" in
+            the file's properties window. This causes the file to
+            be included in the assembly, and makes it available
+            to the application as a resource.
+        -->
+
+        <!--Source="C:\Users\amael.berteau\OneDrive\Projets\SoapUITools\Technique\Examples\EasyNanny-WebAPI-soapui-project.xml"-->
+
+        <XmlDataProvider x:Key="xmldata"
+                         Source="testdata.xml"
+                         XPath="/root" />
+
+        <!--
+            Data Templates for each XML tag type expected in file.
+            
+            DataType        - Matches the tag name
+            ItemsSource     - For tags that have descendents this
+                              Henables the tree view to find them.
+            XPath           - Specifies the attribute name to use.
+            
+            When the Xaml parser sees a tag with one of the names
+            specified in DataType, it will use the associated
+            template to display data about that node.
+        -->
+        <HierarchicalDataTemplate DataType="Node"
+                                  ItemsSource="{Binding XPath=./*}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0"
+                           Text="Node:" />
+                <TextBlock Margin="5,0,0,0"
+                           Text="{Binding XPath=@name}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="leaf">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0"
+                           Text="Leaf:" />
+                <TextBlock Margin="5,0,0,0"
+                           Text="{Binding XPath=@name}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="root"
+                                  ItemsSource="{Binding XPath=./*}">
+            <TextBlock Margin="0"
+                       Text="ROOT" />
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+
+    <!--
+        This sets the DataContext of the Grid to the XmlProvider
+        with a key of xmldata (set above in the Window.Resources
+        section).
+    -->
+    <Grid DataContext="{StaticResource xmldata}">
+
+        <!--
+            Setting the ItemsSource to "{Binding}" causes the TreeView
+            to use the Grid's DataContext as its source, and the
+            templates describe how each tag is to be displayed and
+            handled, in case the node has descendent nodes.
+        -->
+        <TreeView Name="dirTree"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  ItemsSource="{Binding}"
+                  VirtualizingStackPanel.IsVirtualizing="False"
+                  VirtualizingStackPanel.VirtualizationMode="Standard" />
     </Grid>
 </Window>
